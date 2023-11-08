@@ -1,1 +1,1 @@
-# Image-Gallery-Functional
+# Image Gallery Functional
