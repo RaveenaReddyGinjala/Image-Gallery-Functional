@@ -1,15 +1,57 @@
+.App{
+  padding: 20px;
+ display: flex;
+ flex-direction: column;
+
+}
+
+.input-container{
+  margin-bottom: 10px;
+  display: flex;
+  width:100%
+}
+.input-container>input{
+  height:30px;
+  border-radius: 10px;
+  padding-left: 15px;
+  width: 80%;
+  
+}
+
+
+
 .image-list {
   display: grid;
+  /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr; */
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-gap: 16px;
+  
+  
 }
  
 .image-item {
   position: relative;
   overflow: hidden;
+  background-color:rgb(195, 225, 243); 
+  box-shadow: aqua;
+  border-radius: 5px; 
+
+ } 
+
+
+.image-data{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.image-outlinecontainer{
+  display: flex;
+  flex-direction: column;
+  
+ 
 }
  
-.image-item img {
-  width: 100%;
-  height: auto;
-}
+
+
+ 
