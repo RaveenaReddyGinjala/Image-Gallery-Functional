@@ -10,6 +10,9 @@ function App() {
   const key = "XkW3CjWifxqc71-VdKVI04IXAibZx6NCd34Z05Mez6k";
   const [imageData, setImageData] = useState([]);
   const [query, setQuery] = useState("");
+  const [loading, setloading] = useState(true);
+
+  console.log(imageData);
 
   useEffect(() => {
     const input = document.getElementById("input-field");
@@ -25,9 +28,11 @@ function App() {
         .then((response) => {
           setImageData(response.data);
           console.log(response.data);
+          setloading(false);
         })
         .catch((error) => {
           console.error(error);
+          setloading(false);
         });
     } else {
       // console.log(imagedatajson);
@@ -49,6 +54,20 @@ function App() {
   const handleChange = (e) => {
     setQuery(e.target.value);
   };
+
+  const debouncehandler = debounce(handleChange, 500);
+
+  function debounce(fn, delay) {
+    let timer = 0;
+    return function (event) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        if (event.target.value.length) {
+          fn(event);
+        }
+      }, delay);
+    };
+  }
 
   // const breakpointColumnsObj = {
   //   default: 5,
@@ -78,43 +97,52 @@ function App() {
       <div className="input-container">
         <input
           type="text"
-          value={query}
-          onChange={handleChange}
+          defaultValue={query}
+          onKeyDown={debouncehandler}
           placeholder="search"
           id="input-field"
         ></input>
       </div>
-      <>
-        {imageData?.length ? (
-          <div className="image-list">
-            {imageData?.map((image, index) => (
-              <div key={index} className="image-item">
-                <div className="image-outlinecontainer">
-                  <img
-                    width="300"
-                    height="250"
-                    src={image.urls.regular}
-                    alt={`${index}`}
-                  />
-                  <div className="image-data">
-                    <div>
-                      <AiFillHeart fill="red" fontSize={20} />
-                      <span>{image.likes}</span>
-                    </div>
-                    <IoMdDownload
-                      fontSize={25}
-                      onClick={() => handleDownload(image.urls.regular)}
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
-            ,
-          </div>
+
+      <div>
+        {loading ? (
+          <>
+            <h1>Loading</h1>
+          </>
         ) : (
-          <h1>{query ? "NO MATCH FOUND!" : "NETWORK ERROR"}</h1>
+          <>
+            {imageData?.length ? (
+              <div className="image-list">
+                {imageData?.map((image, index) => (
+                  <div key={index} className="image-item">
+                    <div className="image-outlinecontainer">
+                      <img
+                        width="300"
+                        height="250"
+                        src={image.urls.regular}
+                        alt={`${index}`}
+                      />
+                      <div className="image-data">
+                        <div>
+                          <AiFillHeart fill="red" fontSize={20} />
+                          <span>{image.likes}</span>
+                        </div>
+                        <IoMdDownload
+                          fontSize={25}
+                          onClick={() => handleDownload(image.urls.regular)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                ,
+              </div>
+            ) : (
+              <h1>{query ? "NO MATCH FOUND!" : "NETWORK ERROR"}</h1>
+            )}
+          </>
         )}
-      </>
+      </div>
     </div>
   );
 }
